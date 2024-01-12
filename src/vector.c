@@ -622,7 +622,7 @@ vector_zernike_distance(PG_FUNCTION_ARGS)
 	/* Auto-vectorized */
 	for (int i = 0; i < a->dim; i++)
 	{
-		diff = abs(ax[i] - bx[i]);
+		diff = fabs(ax[i] - bx[i]);
 		sum_ = ax[i]+bx[i]+1;
 		distance += diff / sum_;
 	}
