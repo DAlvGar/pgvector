@@ -603,6 +603,34 @@ vector_l2_squared_distance(PG_FUNCTION_ARGS)
 }
 
 /*
+ * Get the zernike distance between vectors
+ */
+PGDLLEXPORT PG_FUNCTION_INFO_V1(vector_zernike_distance);
+Datum
+vector_zernike_distance(PG_FUNCTION_ARGS)
+{
+	Vector	   *a = PG_GETARG_VECTOR_P(0);
+	Vector	   *b = PG_GETARG_VECTOR_P(1);
+	float	   *ax = a->x;
+	float	   *bx = b->x;
+	float		distance = 0.0;
+	float		diff;
+	float		sum_;
+
+	CheckDims(a, b);
+
+	/* Auto-vectorized */
+	for (int i = 0; i < a->dim; i++)
+	{
+		diff = abs(ax[i] - bx[i]);
+		sum_ = ax[i]+bx[i]+1;
+		distance += diff / sum_;
+	}
+
+	PG_RETURN_FLOAT8((double) distance);
+}
+
+/*
  * Get the inner product of two vectors
  */
 PGDLLEXPORT PG_FUNCTION_INFO_V1(inner_product);

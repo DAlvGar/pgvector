@@ -84,6 +84,9 @@ CREATE FUNCTION vector_cmp(vector, vector) RETURNS int4
 CREATE FUNCTION vector_l2_squared_distance(vector, vector) RETURNS float8
 	AS 'MODULE_PATHNAME' LANGUAGE C IMMUTABLE STRICT PARALLEL SAFE;
 
+CREATE FUNCTION vector_zernike_distance(vector, vector) RETURNS float8
+	AS 'MODULE_PATHNAME' LANGUAGE C IMMUTABLE STRICT PARALLEL SAFE;
+
 CREATE FUNCTION vector_negative_inner_product(vector, vector) RETURNS float8
 	AS 'MODULE_PATHNAME' LANGUAGE C IMMUTABLE STRICT PARALLEL SAFE;
 
@@ -260,6 +263,11 @@ CREATE OPERATOR CLASS vector_l2_ops
 	FUNCTION 1 vector_l2_squared_distance(vector, vector),
 	FUNCTION 3 l2_distance(vector, vector);
 
+CREATE OPERATOR CLASS vector_z_ops
+	DEFAULT FOR TYPE vector USING ivfflat AS
+	OPERATOR 1 <@> (vector, vector) FOR ORDER BY float_ops,
+	FUNCTION 1 vector_zernike_distance(vector, vector);
+
 CREATE OPERATOR CLASS vector_ip_ops
 	FOR TYPE vector USING ivfflat AS
 	OPERATOR 1 <#> (vector, vector) FOR ORDER BY float_ops,
@@ -279,6 +287,11 @@ CREATE OPERATOR CLASS vector_l2_ops
 	FOR TYPE vector USING hnsw AS
 	OPERATOR 1 <-> (vector, vector) FOR ORDER BY float_ops,
 	FUNCTION 1 vector_l2_squared_distance(vector, vector);
+
+CREATE OPERATOR CLASS vector_z_ops
+	FOR TYPE vector USING hnsw AS
+	OPERATOR 1 <@> (vector, vector) FOR ORDER BY float_ops,
+	FUNCTION 1 vector_zernike_distance(vector, vector);
 
 CREATE OPERATOR CLASS vector_ip_ops
 	FOR TYPE vector USING hnsw AS

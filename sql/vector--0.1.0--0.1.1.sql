@@ -31,6 +31,7 @@ ALTER FUNCTION vector_ge(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector_gt(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector_cmp(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector_l2_squared_distance(vector, vector) PARALLEL SAFE;
+ALTER FUNCTION vector_zernike_distance(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector_negative_inner_product(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector_spherical_distance(vector, vector) PARALLEL SAFE;
 ALTER FUNCTION vector(vector, integer, boolean) PARALLEL SAFE;
